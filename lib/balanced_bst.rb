@@ -45,6 +45,13 @@ class Tree
     @array = @array.sort.uniq
     update_tree
   end
+
+  def delete(value)
+    return 'Value is not in tree!' unless @array.include?(value)
+
+    @array.delete(value)
+    update_tree
+  end
 end
 
 # example code
