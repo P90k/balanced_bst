@@ -52,6 +52,19 @@ class Tree
     @array.delete(value)
     update_tree
   end
+
+  def find(value, node = @root)
+    return nil if node.nil?
+
+    return node if node.data == value
+
+    left = find(value, node.left)
+    return left unless left.nil?
+
+    right = find(value, node.right)
+
+    return right unless right.nil?
+  end
 end
 
 # example code
