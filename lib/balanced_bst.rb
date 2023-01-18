@@ -30,14 +30,25 @@ class Tree
     Node.new(midpoint, left_tree, right_tree) # constructing binary search tree.
   end
 
+  def update_tree
+    @root = build_tree
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
     pretty_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left
+  end
+
+  def insert(value)
+    @array << value
+    @array = @array.sort.uniq
+    update_tree
   end
 end
 
 # example code
 arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 tree = Tree.new(arr)
+tree.insert(100)
 tree.pretty_print
