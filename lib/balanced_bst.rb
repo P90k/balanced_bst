@@ -58,12 +58,7 @@ class Tree
 
     return node if node.data == value
 
-    left = find(value, node.left)
-    return left unless left.nil?
-
-    right = find(value, node.right)
-
-    return right unless right.nil?
+    value < node.data ? find(value, node.left) : find(value, node.right)
   end
 end
 
@@ -72,3 +67,4 @@ arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 tree = Tree.new(arr)
 tree.insert(100)
 tree.pretty_print
+
