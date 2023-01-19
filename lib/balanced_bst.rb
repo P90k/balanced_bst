@@ -40,10 +40,12 @@ class Tree
     pretty_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left
   end
 
-  def insert(value)
-    @array << value
-    @array = @array.sort.uniq
-    update_tree
+  def insert(value, node = @root)
+    if value < node.data
+      node.left.nil? ? node.left = Node.new(value) : insert(value, node.left)
+    elsif value > node.data
+      node.right.nil? ? node.right = Node.new(value) : insert(value, node.right)
+    end
   end
 
   def delete(value)
@@ -65,6 +67,6 @@ end
 # example code
 arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 tree = Tree.new(arr)
-tree.insert(100)
+tree.insert(2)
+tree.insert 15
 tree.pretty_print
-
