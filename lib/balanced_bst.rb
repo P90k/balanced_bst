@@ -116,6 +116,22 @@ class Tree
     return delete_node_two_children(current_node) if number_of_children == 2
 
   end
+
+  def level_order(tree = @root)
+    queue = [tree.data]
+    array_of_values = []    
+    while queue.length > 0
+      visited_node = find(queue.shift)
+      left_tree = visited_node.left
+      right_tree = visited_node.right
+      queue << left_tree.data unless left_tree.nil?
+      queue << right_tree.data unless right_tree.nil?
+      array_of_values << visited_node.data unless block_given?
+      yield(visited_node.data) if block_given?
+    end
+    array_of_values unless block_given?
+  end
+
 end
 
 # example code
