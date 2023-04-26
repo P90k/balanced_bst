@@ -192,6 +192,19 @@ class Tree
     array_of_values unless block_given?
   end
 
+  def depth(node)
+    Integer === node ? node_tree = find(node) : node_tree = node
+    number_of_children = count_children(node_tree.data)
+
+    return 0 if number_of_children == 0
+    if number_of_children == 1
+      node_tree.left.nil? ? 1 + depth(node_tree.right) : 1 + depth(node_tree.left)
+    elsif number_of_children == 2
+      right_subtree = 1 + depth(node_tree.right)
+      left_subtree = 1 + depth(node_tree.left)
+      left_subtree < right_subtree ? right_subtree : left_subtree
+    end
+  end
 end
 
 # example code
