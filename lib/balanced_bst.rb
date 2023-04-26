@@ -132,6 +132,66 @@ class Tree
     array_of_values unless block_given?
   end
 
+  def in_order(queue = [@root.data], tree = @root, array_of_values=[])
+    
+    if tree.left.nil? && queue.length > 0
+      visited_node = queue.pop
+      array_of_values << visited_node
+      yield(visited_node) if block_given?
+    end
+    unless tree.left.nil?
+      queue << tree.left.data
+      in_order(queue, tree.left, array_of_values)
+    end
+
+    if tree.right.nil? && queue.length > 0
+      visited_node = queue.pop
+      array_of_values << visited_node
+      yield visited_node if block_given?
+    end
+    unless tree.right.nil?
+      queue << tree.right.data
+      in_order(queue, tree.right, array_of_values)
+    end
+    array_of_values unless block_given?
+  end
+
+  def pre_order(queue = [@root.data], tree = @root, array_of_values = [], &block)
+    visited_node = queue.pop 
+    yield visited_node if block_given?
+    array_of_values << visited_node unless visited_node.nil?
+    unless tree.left.nil?
+      visited_node = tree.left.data
+      queue << visited_node
+      pre_order(queue, tree.left, array_of_values, &block)
+    end
+    unless tree.right.nil?
+      visited_node = tree.right.data
+      queue << visited_node
+      pre_order(queue, tree.right, array_of_values, &block)
+    end
+    array_of_values unless block_given?
+  end
+
+  def post_order(queue = [@root.data], tree = @root, array_of_values = [], &block)
+    unless tree.left.nil?
+      visited_node = tree.left.data
+      queue << visited_node
+      post_order(queue, tree.left, array_of_values, &block)
+    end
+    unless tree.right.nil?
+      visited_node = tree.right.data
+      queue << visited_node
+      post_order(queue, tree.right, array_of_values, &block)
+    end
+
+    visited_node = queue.pop
+    array_of_values << visited_node
+
+    yield(visited_node) if block_given?
+    array_of_values unless block_given?
+  end
+
 end
 
 # example code
@@ -142,3 +202,4 @@ tree.insert 15
 tree.insert 100
 tree.insert 10
 tree.insert 11
+tree.pretty_print
