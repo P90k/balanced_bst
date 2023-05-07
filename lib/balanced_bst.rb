@@ -30,10 +30,6 @@ class Tree
     Node.new(midpoint, left_tree, right_tree) # constructing BST
   end
 
-  def update_tree
-    @root = build_tree(@array.sort.uniq)
-  end
-
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -49,10 +45,7 @@ class Tree
     end
   end
 
-  def find_parent(node, tree = @root)
-    # if both children are
- 
-
+  def find_parent(node, tree = @root) 
     return 'Node not found in tree' if tree.left.nil? && tree.right.nil?
     
     return tree if tree.left == node || tree.right == node
@@ -60,8 +53,6 @@ class Tree
     if tree.left.nil? 
       return tree if tree.right == node
     end
-
-    # continue search
     node.data < tree.data ? find_parent(node, tree.left) : find_parent(node, tree.right)
   end
 
@@ -115,6 +106,16 @@ class Tree
     return delete_node_one_child(current_node) if number_of_children == 1
     return delete_node_two_children(current_node) if number_of_children == 2
 
+  end
+
+  def find_next_terminal_node(tree=@root, direction)
+    direction == 'left' ? next_node = tree.left : next_node = tree.right
+    
+    unless next_node.nil?
+      find_next_terminal_node(next_node, direction)
+      yield(next_node.data) if block_given?
+      p next_node.data
+    end
   end
 
   def level_order(tree = @root)
@@ -205,14 +206,18 @@ class Tree
       left_subtree < right_subtree ? right_subtree : left_subtree
     end
   end
-end
 
-# example code
-arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
-tree = Tree.new(arr)
-tree.insert(2)
-tree.insert 15
-tree.insert 100
-tree.insert 10
-tree.insert 11
-tree.pretty_print
+  def balanced?(node=@root)
+    depth_left_subtree = depth(node.left)
+    depth_right_subtree = depth(node.right)
+    difference = depth_left_subtree - depth_right_subtree
+    difference *= -1 if difference < 0
+    difference <= 1
+  end
+
+  def rebalance
+    new_array = in_order()
+    @root = build_tree(new_array)
+  end
+
+end
